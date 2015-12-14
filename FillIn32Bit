@@ -1,0 +1,15 @@
+Function FillIn32Bit(Number)
+
+Size = Len(Number)
+
+Diff = 32 - Size
+
+If Diff <= 0 Then Return
+Result = ""
+For i = 1 to Diff
+	Result := "0"
+Next
+
+Result = Result : Number
+
+Return Result

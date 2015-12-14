@@ -1,0 +1,11 @@
+Function InverseBinary(Number)
+
+size = Len(Number)
+
+Result = ""
+
+For i = 1 to size
+	Result := Not(Number[i,1])
+Next
+
+return Result

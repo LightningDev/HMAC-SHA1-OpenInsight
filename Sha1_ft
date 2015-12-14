@@ -1,0 +1,24 @@
+Function SHA1_FT(t, b, c, d)
+
+Result = BitXor(b, c)
+Result = BitXor(Result, d)
+
+InvB = (b + 1) * -1
+
+If t < 20 Then
+	Result = BitOr(BitAnd(b,c), BitAnd(InvB,d))
+	Return Result
+End 
+
+If t < 40 Then
+	Result = BitXor(b,c)
+	Result = BitXor(Result, d)
+	Return Result
+End 
+
+if t < 60 Then
+	Result =  BitOr(BitAnd(b,c), BitAnd(b,d))
+	Result =  BitOr(Result, BitAnd(c,d))
+End 
+
+Return Result

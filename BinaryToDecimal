@@ -1,0 +1,13 @@
+Function BinaryToDecimal(number)
+
+Declare Function SRP_MATH
+
+Result = 0
+
+Size = len(Number)
+
+For i = 1 to Size
+	Result += SRP_MATH("POW", 2, (Size - i)) * number[i,1]
+Next
+
+Return Result

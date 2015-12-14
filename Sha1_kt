@@ -1,0 +1,15 @@
+Function sha1_kt(t)
+
+if t < 20 then
+	Return 1518500249
+End
+
+if t < 40 then
+	Return 1859775393
+End
+
+if t < 60 Then
+	Return -1894007588
+End
+
+Return -899497514

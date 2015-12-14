@@ -1,0 +1,47 @@
+Function Shift_Bit(value, bits, direction ,zero)
+
+Declare Fuction SRP_MATH, ConvertToBinary, Shift_bit, BinaryToDecimal, InverseBinary, FillIn32Bit
+Declare Subroutine ConvertToBinary
+
+If Not(Assigned(value)) or Not(Assigned(bits)) or Not(Assigned(direction)) then Return
+
+If Not(Assigned(zero)) Then Zero = 0
+
+val = SRP_MATH("POW", 2, bits)
+
+mask = ""
+
+If direction EQ 1 Then
+	mask = value * val
+End Else
+	rountozero = SRP_MATH("FLOOR", (value/val))
+	mask = roundtozero
+
+	if zero EQ 1 Then
+		if mask < 0 Then
+			NonNegative = Mask * -1
+			TempValue = ""
+			ConvertToBinary(NonNegative, TempValue)
+			TempValue = FillIn32Bit(TempValue)
+			TempValue = InverseBinary(TempValue)
+
+			For i = 1 to bits
+				TempValue[i, 1] = 0
+			Next
+
+			TempValue = BinaryToDecimal(TempValue) + 1
+
+			mask = TempValue
+		End
+	End
+End
+
+temp = ""
+
+ConvertToBinary(mask, temp)
+
+BitCount = Len(Temp)
+
+If BitCount > 32 Then
+
+End 

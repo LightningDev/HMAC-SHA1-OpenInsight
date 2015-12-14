@@ -1,0 +1,39 @@
+Function HMAC_SHA1(Key, Message, Output)
+
+Declare Function StringToBinary, Core_Sha1
+
+Equ ipad$ to 909522486 /* 0x36363636 */
+Equ opad$ to 1549556828 /* 0x5C5C5C5C */
+Equ hashOutput$ to 160 /* 160 bit */
+
+chrsz = 8
+
+BinaryKey = StringToBinary(Key)
+
+Length = DCount(BinaryKey, @FM)
+
+If Length > 16 then
+	BinaryKey = Core_Sha1(BinaryKey, Len(Key) * chrsz)
+End
+
+ipad = ""
+opad = ""
+
+For i = 1 to 16
+	ipad<i> = BitXor(BinaryKey<i>, ipad$)
+	opad<i> = BitXor(BinaryKey<i>, opad$)
+Next
+
+MessageBinb = StringToBinary(Message)
+
+ipad_value = ipad : @FM : MessageBinb
+
+MessageLength = Len(Message)
+
+hash = core_sha1(ipad_value, 512 + MessageLength * chrsz)
+
+opad_value = opad : @FM : hash
+
+result = core_sha1(opad_value, 512 + hashOutput$)
+
+Return result

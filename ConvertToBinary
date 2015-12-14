@@ -1,0 +1,11 @@
+Function ConvertToBinary(n, result)
+
+Declare Subroutine ConvertToBinary
+
+If Int(n/2) <> 0 Then
+	ConvertToBinary(n/2, result)
+End
+
+result := Int(Mod(n,2))
+
+Return

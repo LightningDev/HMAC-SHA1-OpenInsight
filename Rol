@@ -1,0 +1,10 @@
+Function Rol(Number, Cnt)
+
+Declare Function Shift_Bit
+
+Left = Shift_Bit(Number, cnt, 1)
+Right = Shift_Bit(Number, (32 - cnt), 2, 1)
+
+Result = BitOr(Left, Right)
+
+Return Result

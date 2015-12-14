@@ -1,0 +1,50 @@
+Function Binb2b64(binarray)
+
+Equ chrsz$ to 8
+Equ HexNumber$ to 255 /* 0xFF */
+Equ HexNumber1$ to 63 /* 0x3F */
+
+Declare Function Shift_Bit
+
+tab = "ABCDEFGH"
+
+str = ""
+
+Length = DCount(Binarray, @FM)
+
+For i = 0 To (Length * 4 - 1)
+
+	BinIndex = Shift_Bit(i, 2, 2, 0) + 1
+	BinIndex1 = Shift_Bit(i + 1, 2, 2, 0) + 1
+	BinIndex2 = Shift_Bit(i + 2, 2, 2, 0) + 1
+
+	FirstRight = Shift_Bit(Binarray<BinIndex>, 8 * (3 - Mod(i,4)), 2, 0)
+	FirstRight1 = Shift_Bit(Binarray<BinIndex1>, 8 * (3 - Mod(i+1, 4)), 2, 0)
+	FirstRight2 = Shift_Bit(Binarray<BinIndex2>, 8 * (3 - Mod(i+2, 4)), 2, 0)
+
+	FirstAnd = BitAnd(FirstRight, HexNumber$)
+	FirstAnd1 = BitAnd(FirstRight1, HexNumber$)
+	FirstAnd2 = BitAnd(FirstRight2, HexNumber$)
+
+	SecondShift = Shift_bit(FirstAnd, 16, 1, 0)
+	SecondShift1 = Shift_Bit(FirstAnd1, 8, 1, 0)
+	
+	triplet = BitOr(SecondShift, SecondShift1)
+	triplet = BitOr(triplet, FirstAnd2)
+
+	For j = 0 to 3
+		condtion = i * 8 + j * 6
+
+		If Condition > (Length * 32) Then
+			str := "="
+		End Else
+			tabindex = Shift_bit(triplet, 6*(3-j), 2, 0)
+			tabindex = bitand(tabindex, HexNumber1$)
+			str := tab[tabindex + 1, 1]
+		End 
+	Next
+	i = i + 2
+
+Next
+
+Retrn str

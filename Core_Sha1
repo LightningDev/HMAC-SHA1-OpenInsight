@@ -1,0 +1,80 @@
+Function Core_Sha1(value, length)
+
+Declare Function Shift_Bit, rol, safe_add, sha1_ft, sha1_kt
+
+ValueIndex = Shift_Bit(length, 5, 2)
+
+value<ValueIndex + 1> = bitor(value<ValueIndex + 1>, Shift_Bit(128, 24 - Mod(Length, 32), 1))
+
+ValueIndex = Shift_Bit(Shift_Bit(length + 64, 9, 2), 4, 1) + 15
+
+Value<ValueIndex + 1> = length
+
+w = ""
+a = 1732584193
+b = -271733879
+c = -1732584194
+d = 271733878
+e = -1009589776
+
+size = Dcount(Value, @FM)
+testArray = ""
+For i = 0 To (Size - 1)
+
+	olda = a
+	oldb = b
+	oldc = c
+	oldd = d
+	olde = e
+
+	For j = 0 to 79
+
+		if j < 16 then
+			w<j + 1> = value<i + j + 1>
+		End Else
+			BitXorResult = BitXor(w<j - 2>, w<j - 7>)
+			BitXorResult = BitXor(BitXorResult, w<j - 13>)
+			BitXorResult = BitXor(BitXorResult, w<j - 15>)
+			w<j + 1> = rol(BitXorResult, 1)
+		End
+
+		rolA = rol(a,5)
+
+		ft4 = sha1_ft(j, b, c, d)
+
+		add1 = safe_add(rolA, ft4)
+
+		add2 = safe_add(e, w<j + 1>)
+
+		ktj = sha1_kt(j)
+
+		add2 = safe_add(add2, ktj)
+
+		t = safe_add(add1, add2)
+
+		e = d
+		d = c
+		c = rol(b, 30)
+		b = a
+		a = t
+		testArray<-1> = t
+	Next j
+
+	a = safe_add(a, olda)
+	b = safe_add(b, oldb)
+	c = safe_add(c, oldc)
+	d = safe_add(d, oldd)
+	e = safe_add(e, olde)
+
+	i = i + 15
+
+Next i
+
+Results = ""
+Results<-1> = a
+Results<-1> = b
+Results<-1> = c
+Results<-1> = d
+Results<-1> = e
+
+Return Results

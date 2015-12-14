@@ -1,0 +1,13 @@
+Function Safe_Add(x,y)
+
+Declare Function Shift_Bit
+
+Equ max_value$ to 65535
+
+lsw = BitAnd(x, max_value$) + BitAnd(y, max_value$)
+
+msw = Shift_Bit(x, 16, 2) + Shift_Bit(y, 16, 2) + Shift_Bit(lsw, 16, 2)
+
+Result = BitOr(Shift_Bit(msw, 16, 1), BitAnd(lsw, max_value$))
+
+Return Result

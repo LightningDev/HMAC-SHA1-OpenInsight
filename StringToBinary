@@ -1,0 +1,33 @@
+Function StringToBinary(string)
+
+Declare Function Shift_bit, SRP_MATH, Char_Code
+
+chrsz = 8 ; /* bits per input character */
+
+mask = Shift_Bit(1, chrsz, 1) - 1
+
+Size = Len(String) * chrsz
+
+array = ""
+
+For i = 0 to Size
+
+	ArrayIndex = Shift_Bit(i, 5, 2)
+
+	StringIndex = SRP_MATH("CEILING", (i/chrsz))
+
+	Character = string[StringIndex + 1, 1]
+
+	CharacterCode = Char_Code(Character)
+
+	BitAndResult = bitand(CharacterCode, mask)
+
+	ShiftValue = 32 - chrsz - Mod(i,32)
+
+	array<ArrayIndex + 1> = bitor(array<ArrayIndex + 1>, Shift_Bit(BitAndResult, ShiftValue, 1))
+
+	i = i + chrsz - 1
+
+Next i 
+
+Return array
