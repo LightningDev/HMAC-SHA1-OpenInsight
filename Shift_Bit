@@ -1,47 +1,80 @@
-Function Shift_Bit(value, bits, direction ,zero)
+Function Shift_Bit(value, bits, direction, zero)
 
-Declare Fuction SRP_MATH, ConvertToBinary, Shift_bit, BinaryToDecimal, InverseBinary, FillIn32Bit
+/************************************************************************************************
+ *																								*
+ *  Description:		Shift n bits to left or right				 							*
+ *																								*
+ *	Parameters:																					*
+ *       		direction: 1 - Shift Left (<<)													*
+ *				   2 - Shift Right (>>)													*
+ *			Zero:	1 - Zero-fill right shift (>>>)											*
+ *																								*
+ * History:																						*
+ *	06/12/2015	NT	Created - 																	*
+ ************************************************************************************************/
+
+Declare Function SRP_MATH, ConvertToBinary, Shift_bit, BinaryToDecimal, InverseBinary, Fillin32bit
 Declare Subroutine ConvertToBinary
 
-If Not(Assigned(value)) or Not(Assigned(bits)) or Not(Assigned(direction)) then Return
+If Not(Assigned(value)) Or Not(Assigned(bits)) Or Not(Assigned(direction)) Then Return
 
-If Not(Assigned(zero)) Then Zero = 0
+If Not(Assigned(zero)) Then Zero = 0 
 
 val = SRP_MATH("POW", 2, bits)
 
 mask = ""
-
+	
 If direction EQ 1 Then
-	mask = value * val
-End Else
-	rountozero = SRP_MATH("FLOOR", (value/val))
-	mask = roundtozero
+	
+	mask = (value * val)
 
-	if zero EQ 1 Then
-		if mask < 0 Then
+End Else
+	
+	roundtozero = SRP_MATH("FLOOR", (value / val))
+	mask = roundtozero
+	
+	If zero EQ 1 Then
+	
+		If mask < 0 Then
+		
 			NonNegative = Mask * -1
 			TempValue = ""
 			ConvertToBinary(NonNegative, TempValue)
-			TempValue = FillIn32Bit(TempValue)
+			TempValue = Fillin32bit(TempValue)
 			TempValue = InverseBinary(TempValue)
 
-			For i = 1 to bits
+			For i = 1 To bits
 				TempValue[i, 1] = 0
-			Next
-
+			Next 
+			
 			TempValue = BinaryToDecimal(TempValue) + 1
-
+			
 			mask = TempValue
-		End
-	End
-End
+		End 
+	
+	End 
+
+End 
 
 temp = ""
 
 ConvertToBinary(mask, temp)
 
-BitCount = Len(Temp)
+BitCount = Len(temp)
 
 If BitCount > 32 Then
 
+	DiffCount = BitCount - 32
+	temp = temp[DiffCount + 1, 32]
+	
+	mask = IConv(temp, "MB")
+	
+	If temp[1,1] EQ 1 Then
+		test = InverseBinary(temp)
+		mask = IConv(test, "MB") + 1
+		mask = mask * -1
+	End
+
 End 
+
+Return mask
